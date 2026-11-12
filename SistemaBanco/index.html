@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistema de Banco</title>
+    <link rel="stylesheet" href="estilos.css">
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+<body>
+
+    <header class="encabezado">
+        <h1>Sistema de Gestión Bancaria</h1>
+    </header>
+
+    <main class="contenedor-principal">
+        
+        <section class="grid-formularios">
+            
+           
+            <div class="tarjeta">
+                <h2 id="tituloFormCliente">1. Registrar Cliente</h2>
+                <form id="formCliente">
+                    <label for="id_cliente">ID Cliente</label>
+                    <input type="text" id="id_cliente" placeholder="Ej: CL03" maxlength="10" required>
+
+                    <label for="nombres">Nombres</label>
+                    <input type="text" id="nombres" placeholder="Ej: Juan Carlos" required>
+
+                    <label for="apellidos">Apellidos</label>
+                    <input type="text" id="apellidos" placeholder="Ej: Pérez Gómez" required>
+
+                    <label for="dni">DNI (8 dígitos)</label>
+                    <input type="text" id="dni" placeholder="Ej: 71234567" maxlength="8" minlength="8" required>
+
+                    <label for="telefono">Teléfono</label>
+                    <input type="text" id="telefono" placeholder="Ej: 987654321">
+
+                    <button type="submit" id="btnGuardarCliente">Guardar Cliente</button>
+                    <button type="button" id="btnCancelarCliente" class="btn-secundario oculto">Cancelar Edición</button>
+                </form>
+            </div>
+
+            
+            <div class="tarjeta">
+                <h2 id="tituloFormCuenta">2. Aperturar Cuenta</h2>
+                <form id="formCuenta">
+                    <label for="id_cuenta_nueva">ID Cuenta</label>
+                    <input type="text" id="id_cuenta_nueva" placeholder="Ej: CTA03" maxlength="10" required>
+
+                    <label for="numero_cuenta">Número de Cuenta</label>
+                    <input type="text" id="numero_cuenta" placeholder="Ej: 191-00055566-03" required>
+
+                    <label for="select_cliente">Cliente Titular</label>
+                    <select id="select_cliente" required>
+                        <option value="">Seleccione un cliente...</option>
+                    </select>
+
+                    <label for="select_tipo">Tipo de Cuenta</label>
+                    <select id="select_tipo" required>
+                        <option value="">Seleccione tipo de cuenta...</option>
+                    </select>
+
+                    <label for="saldo_inicial">Saldo (S/)</label>
+                    <input type="number" step="0.01" id="saldo_inicial" value="0.00" min="0" required>
+
+                    <button type="submit" id="btnGuardarCuenta">Crear Cuenta</button>
+                    <button type="button" id="btnCancelarCuenta" class="btn-secundario oculto">Cancelar Edición</button>
+                </form>
+            </div>
+
+            
+            <div class="tarjeta">
+                <h2>3. Registrar Movimiento</h2>
+                <form id="formMovimiento">
+                    <label for="id_movimiento">ID Movimiento</label>
+                    <input type="text" id="id_movimiento" placeholder="Ej: MOV03" maxlength="10" required>
+
+                    <label for="select_cuenta_mov">Cuenta Bancaria</label>
+                    <select id="select_cuenta_mov" required>
+                        <option value="">Seleccione una cuenta...</option>
+                    </select>
+
+                    <label for="tipo_movimiento">Tipo de Operación</label>
+                    <select id="tipo_movimiento" required>
+                        <option value="DEPOSITO">DEPÓSITO (+)</option>
+                        <option value="RETIRO">RETIRO (-)</option>
+                    </select>
+
+                    <label for="monto">Monto (S/)</label>
+                    <input type="number" step="0.01" id="monto" placeholder="Ej: 250.00" min="0.01" required>
+
+                    <label for="descripcion">Descripción</label>
+                    <input type="text" id="descripcion" placeholder="Ej: Depósito en ventanilla">
+
+                    <button type="submit">Procesar Movimiento</button>
+                </form>
+            </div>
+
+        </section>
+
+        
+        <section class="tarjeta tabla-seccion">
+            <h2>Clientes Registrados</h2>
+            <div class="tabla-responsive">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>ID Cliente</th>
+                            <th>Nombres y Apellidos</th>
+                            <th>DNI</th>
+                            <th>Teléfono</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tablaClientes"></tbody>
+                </table>
+            </div>
+        </section>
+
+        <section class="tarjeta tabla-seccion">
+            <h2>Cuentas Activas</h2>
+            <div class="tabla-responsive">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>ID Cuenta</th>
+                            <th>N° Cuenta</th>
+                            <th>Cliente Titular</th>
+                            <th>DNI</th>
+                            <th>Tipo de Cuenta</th>
+                            <th>Saldo Actual</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tablaCuentas"></tbody>
+                </table>
+            </div>
+        </section>
+
+    
+        <section class="tarjeta tabla-seccion">
+            <h2>Historial de Movimientos Bancarios</h2>
+            <div class="tabla-responsive">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>ID Mov</th>
+                            <th>N° Cuenta</th>
+                            <th>Operación</th>
+                            <th>Monto</th>
+                            <th>Descripción</th>
+                            <th>Fecha y Hora</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tablaMovimientos"></tbody>
+                </table>
+            </div>
+        </section>
+    </main>
+
+    <script src="conexion.js"></script>
+</body>
+</html>
